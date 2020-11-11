@@ -4,8 +4,10 @@ import io from 'socket.io-client';
 import Layout from "../components/layout"
 
 const IndexPage = () => {
-  const socketURL = '/socket';
+  const socketURL = 'http://localhost:3000/';
+  // const socket = io(socketURL, {transports: ['websocket']});
   const socket = io(socketURL);
+  console.log(socket);
 
   useEffect(() => {
     return () => {
@@ -18,7 +20,7 @@ const IndexPage = () => {
   });
 
   const onButtonClick = () => {
-    console.log("BUTTON CLICKED");
+    console.log("BUTTON CLICKED", socket);
     socket.emit('detection', 'TEST DETECTION');
   }
 
