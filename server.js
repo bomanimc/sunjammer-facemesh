@@ -1,21 +1,24 @@
 const app = require('express')();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {origins: '*:*'});
+const path = require('path');
 
 const env = process.env.NODE_ENV || 'development';
 const port = process.env.PORT || 3000;
 
 // socket.io server
 io.on('connection', (socket) => {
+  console.log("Someone connected");
   socket.emit('message', 'YO');
 
   socket.on('detection', (data) => {
+    console.log(data);
     socket.broadcast.emit('detection', data);
   });
 });
 
 app.get('*', (req, res) => {
-  return nextHandler(req, res);
+  res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
 server.listen(port, (err) => {
