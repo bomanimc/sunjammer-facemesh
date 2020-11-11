@@ -25,6 +25,8 @@ import * as tfjsWasm from '@tensorflow/tfjs-backend-wasm';
 
 import {TRIANGULATION} from './triangulation';
 
+const socket = io();
+
 tfjsWasm.setWasmPaths(
     `https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@${tfjsWasm.version_wasm}/dist/`);
 
@@ -133,8 +135,11 @@ async function renderPrediction() {
     input: video,
     returnTensors: false,
     flipHorizontal: false,
-    predictIrises: state.predictIrises
+    predictIrises: state.predictIrises,
   });
+
+  socket.emit('prediction', predictions);
+
   ctx.drawImage(
       video, 0, 0, videoWidth, videoHeight, 0, 0, canvas.width, canvas.height);
 
