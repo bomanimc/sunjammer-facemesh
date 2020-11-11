@@ -13,10 +13,10 @@ app.use(express.static(__dirname + '/dist'));
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'development';
 
-const predictions = [];
+let lastPrediction = null;
 
-app.get('/predictions', function(req, res) {
-  res.json({predictions});
+app.get('/lastPrediction', function(req, res) {
+  res.json({lastPrediction});
 });
 
 app.get('*', (req, res) => {
@@ -32,7 +32,7 @@ http.listen(port, (err) => {
 io.on('connection', (socket) => {
   console.log('Someone connected');
   socket.on('prediction', (data) => {
-    predictions.push(data);
+    lastPrediction = data;
     socket.broadcast.emit('prediction', data);
   });
 });
